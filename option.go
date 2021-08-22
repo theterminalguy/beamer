@@ -14,8 +14,34 @@ const (
 	blank               = ""
 )
 
-func ExtractOptionsFromFile(filePath string) []string {
-	options := make([]string, 0)
+type JobOptions []string
+
+func (options JobOptions) WriteToFile() {
+	config := map[string]interface{}{
+		"jobName":        blank,
+		"gcsLocation":    blank,
+		"region":         blank,
+		"project":        blank,
+		"serviceAccount": blank,
+	}
+	if len(options) < 1 {
+		return
+	}
+	parameters := map[string]string{}
+	for _, option := range options {
+		parameters[option] = blank
+	}
+	config["parameters"] = parameters
+
+	/**
+	*	Check if the `.beamer/` directory exist in the current directory
+	* 	If yes, generate a new file with .json For example BigQueryToDatastore.json
+	*	If no, prompt the user to run beamer init, this will create the beamer directory
+	 */
+}
+
+func ExtractOptionsFromFile(filePath string) JobOptions {
+	var options JobOptions
 	reader := open(filePath)
 	re := regexp.MustCompile("[^a-zA-Z0-9]+")
 	for {
