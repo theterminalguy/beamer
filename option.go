@@ -2,7 +2,10 @@ package beamer
 
 import (
 	"bufio"
+	"encoding/json"
+	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -33,11 +36,15 @@ func (options JobOptions) WriteToFile(fileName string) {
 	}
 	config["parameters"] = parameters
 
-	/**
-	*	Check if the `.beamer/` directory exist in the current directory
-	* 	If yes, generate a new file with .json For example BigQueryToDatastore.json
-	*	If no, prompt the user to run beamer init, this will create the beamer directory
-	 */
+	// write config to file
+	b, err := json.Marshal(config)
+	if err != nil {
+		panic(err)
+	}
+	err = ioutil.WriteFile(fmt.Sprintf(".beamer/%s", fileName), b, 0644)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func ExtractOptionsFromFile(filePath string) JobOptions {

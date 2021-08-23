@@ -69,7 +69,8 @@ func Gen(templateName string) {
 	config := strings.Split(txt, "=")
 	filePath := fmt.Sprintf("%s%s.java", config[1], templateName)
 	options := ExtractOptionsFromFile(filePath)
-	fmt.Println(options)
+	options.WriteToFile(fmt.Sprintf("%s.json", templateName))
+	fmt.Printf("Job config template generated for `%s` migration.\n", templateName)
 }
 
 func Run() {
