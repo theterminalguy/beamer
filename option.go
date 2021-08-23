@@ -56,6 +56,14 @@ func (jc *JobConfig) Validate() {
 	}
 }
 
+func (jc *JobConfig) ParamString() string {
+	params := []string{}
+	for k, v := range jc.Parameters {
+		params = append(params, fmt.Sprintf("%v=%v", k, v))
+	}
+	return strings.Join(params, ",")
+}
+
 type JobOptions []string
 
 func (options JobOptions) WriteToFile(fileName string) {
