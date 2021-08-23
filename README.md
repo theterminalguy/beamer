@@ -8,7 +8,7 @@ Automatically generate job parameter options from [GCP Dataflow Templates](https
 usage: beamer <command> <args>
 
 These are the only two commands available:
-		init    setup beamer for the current directory
+	init    setup beamer for the current directory
         gen     generates a new job config
         run     runs the generated job config on GCP
 
