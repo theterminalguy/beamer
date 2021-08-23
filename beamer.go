@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -71,6 +72,26 @@ func Gen(templateName string) {
 
 func Run(template string) {
 	// Executes the job, fails if no option is set
+	// ensure all fields are set, if not show an error
+	/*
+			gcloud dataflow jobs run <job-name> \
+		--gcs-location=<template-location> \
+		--zone=<zone> \
+		--parameters <parameters>
+
+	*/
+
+	gcloudExecPath, err := exec.LookPath("gcloud")
+	if err != nil {
+		panic(err)
+	}
+	cmdGCloud := &exec.Cmd{
+		Path:   gcloudExecPath,
+		Args:   []string{gcloudExecPath, "dataflow", "jobs", "run", "hello"},
+		Stdout: os.Stdout,
+		Stderr: os.Stderr,
+	}
+	fmt.Println(cmdGCloud.String())
 }
 
 func beamerDirIsExist() bool {
