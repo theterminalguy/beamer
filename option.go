@@ -43,6 +43,11 @@ func (jc *JobConfig) Validate() {
 	if jc.ServiceAccount == blank {
 		errors = append(errors, "Error: ServiceAccount is required")
 	}
+	for k, v := range jc.Parameters {
+		if v == blank {
+			errors = append(errors, fmt.Sprintf("Parameter Error: %v is required", k))
+		}
+	}
 	if len(errors) > 0 {
 		for _, err := range errors {
 			fmt.Println(err)
@@ -69,8 +74,6 @@ func (options JobOptions) WriteToFile(fileName string) {
 		parameters[option] = blank
 	}
 	config["Parameters"] = parameters
-
-	// write config to file
 	b, err := json.Marshal(config)
 	if err != nil {
 		panic(err)
