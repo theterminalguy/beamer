@@ -15,7 +15,7 @@ var (
 )
 
 func Install() {
-
+	// move to make file
 }
 
 func Init() {
@@ -73,7 +73,7 @@ func Gen(templateName string) {
 	fmt.Printf("Job config template generated for `%s` migration.\n", templateName)
 }
 
-func Run() {
+func Run(template string) {
 	// Executes the job, fails if no option is set
 }
 
