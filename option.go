@@ -17,15 +17,49 @@ const (
 	blank               = ""
 )
 
+type JobConfig struct {
+	JobName        string
+	GcsLocation    string
+	Region         string
+	Project        string
+	ServiceAccount string
+	Parameters     map[string]string
+}
+
+func (jc *JobConfig) Validate() {
+	errors := []string{}
+	if jc.JobName == blank {
+		errors = append(errors, "Error: Job Name is required")
+	}
+	if jc.GcsLocation == blank {
+		errors = append(errors, "Error: GcsLocation is required")
+	}
+	if jc.Region == blank {
+		errors = append(errors, "Error: Region is required")
+	}
+	if jc.Project == blank {
+		errors = append(errors, "Error: Project is required")
+	}
+	if jc.ServiceAccount == blank {
+		errors = append(errors, "Error: ServiceAccount is required")
+	}
+	if len(errors) > 0 {
+		for _, err := range errors {
+			fmt.Println(err)
+		}
+		os.Exit(64)
+	}
+}
+
 type JobOptions []string
 
 func (options JobOptions) WriteToFile(fileName string) {
 	config := map[string]interface{}{
-		"jobName":        blank,
-		"gcsLocation":    blank,
-		"region":         blank,
-		"project":        blank,
-		"serviceAccount": blank,
+		"JobName":        blank,
+		"GcsLocation":    blank,
+		"Region":         blank,
+		"Project":        blank,
+		"ServiceAccount": blank,
 	}
 	if len(options) < 1 {
 		return
@@ -34,7 +68,7 @@ func (options JobOptions) WriteToFile(fileName string) {
 	for _, option := range options {
 		parameters[option] = blank
 	}
-	config["parameters"] = parameters
+	config["Parameters"] = parameters
 
 	// write config to file
 	b, err := json.Marshal(config)

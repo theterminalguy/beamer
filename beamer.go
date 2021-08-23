@@ -1,11 +1,11 @@
 package beamer
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -70,7 +70,7 @@ func Gen(templateName string) {
 	fmt.Printf("Job config template generated for `%s` migration.\n", templateName)
 }
 
-func Run(template string) {
+func Run(templateName string) {
 	// Executes the job, fails if no option is set
 	// ensure all fields are set, if not show an error
 	/*
@@ -81,17 +81,25 @@ func Run(template string) {
 
 	*/
 
-	gcloudExecPath, err := exec.LookPath("gcloud")
+	data, err := ioutil.ReadFile(fmt.Sprintf(".beamer/%s.json", templateName))
 	if err != nil {
 		panic(err)
 	}
-	cmdGCloud := &exec.Cmd{
-		Path:   gcloudExecPath,
-		Args:   []string{gcloudExecPath, "dataflow", "jobs", "run", "hello"},
-		Stdout: os.Stdout,
-		Stderr: os.Stderr,
-	}
-	fmt.Println(cmdGCloud.String())
+	var config JobConfig
+	json.Unmarshal(data, &config)
+	config.Validate()
+
+	// gcloudExecPath, err := exec.LookPath("gcloud")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// cmdGCloud := &exec.Cmd{
+	// 	Path:   gcloudExecPath,
+	// 	Args:   []string{gcloudExecPath, "dataflow", "jobs", "run", "hello"},
+	// 	Stdout: os.Stdout,
+	// 	Stderr: os.Stderr,
+	// }
+	// fmt.Println(cmdGCloud.String())
 }
 
 func beamerDirIsExist() bool {
