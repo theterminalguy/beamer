@@ -16,7 +16,7 @@ const (
 
 type JobOptions []string
 
-func (options JobOptions) WriteToFile() {
+func (options JobOptions) WriteToFile(fileName string) {
 	config := map[string]interface{}{
 		"jobName":        blank,
 		"gcsLocation":    blank,
