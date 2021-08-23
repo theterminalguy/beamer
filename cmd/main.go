@@ -12,6 +12,8 @@ func main() {
 		showHelp()
 	}
 	switch os.Args[1] {
+	case "init":
+		beamer.Init()
 	case "gen":
 		validateTemplateName(os.Args[2])
 		beamer.Gen(os.Args[2])
@@ -24,7 +26,7 @@ func main() {
 }
 
 func showHelp() {
-	text := "usage: beamer <command> <args>\n\nThese are the only two commands available:\n\tgen\tgenerates a new job config\n\trun\truns the generated job config on GCP\n\nExamples:\n\t- Generates a job config for BigQueryToDatastore\n\t$ beamer gen BigQueryToDatastore\n\n\t- Run the job config for BigQueryToDatastore migration\n\t$ beamer run BigQueryToDatastore"
+	text := "usage: beamer <command> <args>\n\nThese are the only commands available:\n\tinit \tsetup beamer for the current directory\t\n\tgen\tgenerates a new job config\n\trun\truns the generated job config on GCP\n\nExamples:\n\t- Generates a job config for BigQueryToDatastore\n\t$ beamer gen BigQueryToDatastore\n\n\t- Run the job config for BigQueryToDatastore migration\n\t$ beamer run BigQueryToDatastore"
 	fmt.Println(text)
 	os.Exit(0)
 }

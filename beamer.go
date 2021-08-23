@@ -10,7 +10,7 @@ import (
 
 var (
 	errBeamerDirNotFound           = errors.New("could not find .beamer directory. \n\tRun `beamer init` to create it")
-	errRepoAbsolutePathNotSet      = errors.New("please set absolute path to GCP Template repo")
+	errRepoAbsolutePathNotSet      = errors.New("please set absolute path in `.beamer/.config/` to GCP Template repo")
 	errTemplateDirNotFoundInConfig = errors.New("please set the template directory in .beamer/config. \n\ttemplateDir=/absolute/path/to/gcp/template ")
 )
 
