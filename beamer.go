@@ -14,10 +14,6 @@ var (
 	errTemplateDirNotFoundInConfig = errors.New("please set the template directory in .beamer/config. \n\ttemplateDir=/absolute/path/to/gcp/template ")
 )
 
-func Install() {
-	// move to make file
-}
-
 func Init() {
 	if beamerDirIsExist() {
 		fmt.Println("Found `.beamer` directory, skipping...")
