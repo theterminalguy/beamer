@@ -71,14 +71,14 @@ func Gen(templateName string) {
 	fmt.Printf("Job config template generated for `%s` migration.\n", templateName)
 }
 
-func Run(templateName string) {
+func Run(templateName string, skipValidation bool) {
 	data, err := ioutil.ReadFile(fmt.Sprintf(".beamer/%s.json", templateName))
 	if err != nil {
 		panic(err)
 	}
 	var config JobConfig
 	json.Unmarshal(data, &config)
-	config.Validate()
+	config.Validate(skipValidation)
 	gcloudExecPath, err := exec.LookPath("gcloud")
 	if err != nil {
 		panic(err)
@@ -87,10 +87,11 @@ func Run(templateName string) {
 		Path: gcloudExecPath,
 		Args: []string{
 			gcloudExecPath, "dataflow", "jobs", "run", config.JobName,
-			fmt.Sprintf("--gcs-location=%v", config.GcsLocation),
-			fmt.Sprintf("--region=%v", config.Region),
-			fmt.Sprintf("--service-account-email=%v", config.ServiceAccount),
+			fmt.Sprintf("--gcs-location=%v", config.GCSLocation),
 			fmt.Sprintf("--project=%v", config.Project),
+			fmt.Sprintf("--region=%v", config.Region),
+			fmt.Sprintf("--service-account-email=%v", config.ServiceAccountEmail),
+			fmt.Sprintf("--staging-location=%v", config.StagingLocation),
 			fmt.Sprintf("--parameters %v", config.ParamString()),
 		},
 		Stdout: os.Stdout,

@@ -19,7 +19,7 @@ func main() {
 		beamer.Gen(os.Args[2])
 	case "run":
 		validateTemplateName(os.Args[2])
-		beamer.Run(os.Args[2])
+		beamer.Run(os.Args[2], false)
 	default:
 		showHelp()
 	}

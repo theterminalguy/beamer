@@ -19,33 +19,39 @@ const (
 
 type JobConfig struct {
 	JobName        string
-	GcsLocation    string
+	GCSLocation    string
+	StagingLocation string
 	Region         string
 	Project        string
-	ServiceAccount string
+	ServiceAccountEmail string
 	Parameters     map[string]string
 }
 
-func (jc *JobConfig) Validate() {
+func (jc *JobConfig) Validate(skipValidation bool) {
 	errors := []string{}
-	if jc.JobName == blank {
-		errors = append(errors, "Error: Job Name is required")
-	}
-	if jc.GcsLocation == blank {
+	if jc.GCSLocation == blank {
 		errors = append(errors, "Error: GcsLocation is required")
 	}
-	if jc.Region == blank {
-		errors = append(errors, "Error: Region is required")
+	if jc.StagingLocation == blank {
+		errors = append(errors, "Error: Staging Location is required")
+	}
+	if jc.JobName == blank {
+		errors = append(errors, "Error: Job Name is required")
 	}
 	if jc.Project == blank {
 		errors = append(errors, "Error: Project is required")
 	}
-	if jc.ServiceAccount == blank {
+	if jc.ServiceAccountEmail == blank {
 		errors = append(errors, "Error: ServiceAccount is required")
 	}
 	for k, v := range jc.Parameters {
 		if v == blank {
 			errors = append(errors, fmt.Sprintf("Parameter Error: %v is required", k))
+		}
+	}
+	if !skipValidation {
+		if jc.Region == blank {
+			errors = append(errors, "Error: Region is required")
 		}
 	}
 	if len(errors) > 0 {
@@ -59,7 +65,7 @@ func (jc *JobConfig) Validate() {
 func (jc *JobConfig) ParamString() string {
 	params := []string{}
 	for k, v := range jc.Parameters {
-		params = append(params, fmt.Sprintf("%v=%v", k, v))
+		params = append(params, fmt.Sprintf("%v=\"%v\"", k, v))
 	}
 	return strings.Join(params, ",")
 }
@@ -69,10 +75,11 @@ type JobOptions []string
 func (options JobOptions) WriteToFile(fileName string) {
 	config := map[string]interface{}{
 		"JobName":        blank,
-		"GcsLocation":    blank,
+		"GCSLocation":    blank,
+		"StagingLocation": blank,
 		"Region":         blank,
 		"Project":        blank,
-		"ServiceAccount": blank,
+		"ServiceAccountEmail": blank,
 	}
 	if len(options) < 1 {
 		return
