@@ -29,7 +29,7 @@ func Init() {
 		panic(err)
 	}
 	tempConfig := "templateDir=<PATH/TO/REPO>/DataflowTemplates/src/main/java/com/google/cloud/teleport/templates/"
-	err = ioutil.WriteFile(".beamer/.config", []byte(tempConfig), 0644)
+	err = ioutil.WriteFile(".beamer/config", []byte(tempConfig), 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -51,7 +51,7 @@ func Gen(templateName string) {
 		fmt.Println(errBeamerDirNotFound)
 		os.Exit(64)
 	}
-	data, err := ioutil.ReadFile(".beamer/.config")
+	data, err := ioutil.ReadFile(".beamer/config")
 	if err != nil {
 		panic(err)
 	}
